@@ -14,5 +14,5 @@ FROM nginx:1.17.3-alpine
 RUN mkdir /app
 WORKDIR /app
 
-COPY --from=builder /app ./
-COPY ../cluster/staging/web.conf /etc/nginx/nginx.conf
+COPY --from=builder /app/build ./
+COPY web.conf /etc/nginx/nginx.conf
