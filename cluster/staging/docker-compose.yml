@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  web:
+    build:
+      context: web
+      dockerfile: ../cluster/staging/web.Dockerfile
+    environment:
+      NODE_ENV: staging
+  server:
+    build:
+      context: server
+      dockerfile: ../cluster/staging/server.Dockerfile
+    environment:
+      NODE_ENV: staging
