@@ -15,4 +15,4 @@ RUN mkdir /app
 WORKDIR /app
 
 COPY --from=builder /app/build ./
-COPY web.conf /etc/nginx/nginx.conf
+COPY web.conf /etc/nginx/conf.d/default.conf
