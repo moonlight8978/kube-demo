@@ -21,6 +21,8 @@ spec:
     matchLabels:
       environment: staging
       component: database
+  strategy:
+    type: Recreate
   template:
     metadata:
       labels:
@@ -39,8 +41,6 @@ spec:
           volumeMounts:
             - name: database-storage
               mountPath: /data/db
-          env:
-            - name: MONGO_INITDB_ROOT_USERNAME
-              value: root
-            - name: MONGO_INITDB_ROOT_PASSWORD
-              value: "1221"
+          envFrom:
+            - secretRef:
+                name: database-env

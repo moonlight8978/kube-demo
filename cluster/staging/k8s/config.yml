@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: database-env
+data:
+  MONGO_INITDB_ROOT_USERNAME: cm9vdAo=
+  MONGO_INITDB_ROOT_PASSWORD: MTIyMQo=
