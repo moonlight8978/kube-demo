@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-lb
+  namespace: staging
+spec:
+  rules:
+    - host: moon.light
+      http:
+        paths:
+          - path: /api
+            backend:
+              serviceName: server
+              servicePort: 80
+          - path: /
+            backend:
+              serviceName: web
+              servicePort: 80
