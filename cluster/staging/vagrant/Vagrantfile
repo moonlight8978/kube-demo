@@ -5,9 +5,9 @@
 # vi: set ft=ruby :
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "centos/7"
+  config.vm.box = "k8s-base"
 
-  config.vm.provision "shell", path: 'setup.sh'
+  # config.vm.provision "shell", path: 'setup.sh'
 
   config.vm.define "master-1" do |master|
     master.vm.hostname = 'master-1'
