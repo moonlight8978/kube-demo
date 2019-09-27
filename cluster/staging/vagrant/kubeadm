@@ -1,2 +1,10 @@
-kubeadm join 192.168.33.100:6443 --token 80l9p1.mye029udtp60ecgf \
-    --discovery-token-ca-cert-hash sha256:a475295c0dc55bb8a246da23478c5fefb3fc152bed7381160942e6895039c05c
+kubeadm init \
+    --apiserver-advertise-address=192.168.33.100 \
+    --apiserver-cert-extra-sans=192.168.33.100 \
+    --pod-network-cidr=192.168.0.0/16
+
+kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+
+kubeadm join 192.168.33.100:6443 --token ftlhh8.40nr1lw53abkhist \
+    --discovery-token-ca-cert-hash sha256:bf7d55c4f0aab85b2600d9235ed021dc651f4fbbd1027baabe184f43a1bdc2ec
+
