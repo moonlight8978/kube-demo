@@ -8,7 +8,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: traefik-ingress-serviceaccount
-  namespace: kube-system
+  namespace: traefik-ingress
 
 ---
 apiVersion: rbac.authorization.k8s.io/v1
@@ -77,14 +77,14 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: traefik-ingress-serviceaccount
-    namespace: kube-system
+    namespace: traefik-ingress
 
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: traefik-ingress
-  namespace: kube-system
+  namespace: traefik-ingress
 spec:
   replicas: 1
   selector:
@@ -139,7 +139,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik-admin
-  namespace: kube-system
+  namespace: traefik-ingress
 spec:
   selector:
     app.kubernetes.io/name: traefik-ingress
@@ -154,7 +154,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: traefik-ingress
-  namespace: kube-system
+  namespace: traefik-ingress
 spec:
   selector:
     app.kubernetes.io/name: traefik-ingress
