@@ -93,7 +93,7 @@ spec:
               containerPort: 443
             - name: admin
               containerPort: 8080
-          command:
+          args:
             - --providers.kubernetesingress=true
             - --api.dashboard=true
             - --ping=true
