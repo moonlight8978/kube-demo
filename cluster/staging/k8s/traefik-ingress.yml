@@ -63,7 +63,7 @@ metadata:
     app.kubernetes.io/part-of: traefik-ingress
 spec:
   replicas: 1
-  selectors:
+  selector:
     matchLabels:
       app.kubernetes.io/name: traefik-ingress
       app.kubernetes.io/part-of: traefik-ingress
