@@ -118,4 +118,24 @@ spec:
             timeoutSeconds: 10
 
 ---
-apiVersion:
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-ingress
+  labels:
+    app.kubernetes.io/name: traefik-ingress
+    app.kubernetes.io/part-of: traefik-ingress
+spec:
+  selector:
+    app.kubernetes.io/name: traefik-ingress
+    app.kubernetes.io/part-of: traefik-ingress
+  type: NodePort
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
