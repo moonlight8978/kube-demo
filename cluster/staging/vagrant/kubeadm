@@ -5,8 +5,9 @@ kubeadm init \
     --apiserver-cert-extra-sans=192.168.33.100 \
     --pod-network-cidr=192.168.0.0/16
 
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
 kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
 
-kubeadm join 192.168.33.100:6443 --token 9trj84.vbpwwzwkh3iw4j9u --discovery-token-ca-cert-hash sha256:2b6b4e423746acc15ef6cd2734bbd1de6ccacef03122c8bc6e02270cf7c34bc0
-
-
+kubeadm join 192.168.33.100:6443 --token sr9y03.ys5huurggtiz2nqg \
+    --discovery-token-ca-cert-hash sha256:dfc5919050f3ec513ee0bbda993ba9c3e29fe01bf4b29f39c9136974a9b7d0d9
