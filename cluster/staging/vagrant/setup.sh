@@ -68,11 +68,3 @@ systemctl enable --now kubelet
 
 # Turn off swap
 swapoff -a
-
-# Init k8s cluster
-# kubeadm config images pull
-# kubeadm init
-
-# Join k8s cluster
-# kubeadm join 10.0.2.15:6443 --token m7ct8t.k895gy53bk6d1lu7 \
-#     --discovery-token-ca-cert-hash sha256:4ee0ba534876536de67d2230d2dfe9b43e500970bfb1edac326776f147ebec28
