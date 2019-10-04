@@ -94,9 +94,9 @@ spec:
             - name: admin
               containerPort: 8080
           command:
-            - --providers.kubernetesingress
-            - --api.dashboard
-            - --ping
+            - --providers.kubernetesingress=true
+            - --api.dashboard=true
+            - --ping=true
           livenessProbe:
             exec:
               command:
