@@ -7,11 +7,11 @@ spec:
   rules:
     - http:
         paths:
-          - path: /api
-            backend:
-              serviceName: server
-              servicePort: http
+          # - path: /api
+          #   backend:
+          #     serviceName: server
+          #     servicePort: http
           - path: /
             backend:
               serviceName: web
-              servicePort: http
+              servicePort: 80
