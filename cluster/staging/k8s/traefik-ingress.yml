@@ -164,6 +164,7 @@ spec:
       port: 80
       targetPort: 80
       protocol: TCP
+      nodePort: 31286
     - name: https
       port: 443
       targetPort: 443
