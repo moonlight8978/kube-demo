@@ -6,11 +6,11 @@ subsets:
   - addresses:
       - ip: 172.16.0.210
     ports:
-      - port: 1
+      - port: 3678
   - addresses:
       - ip: 172.16.0.220
     ports:
-      - port: 1
+      - port: 22961
 
 ---
 apiVersion: v1
