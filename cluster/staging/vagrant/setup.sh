@@ -36,7 +36,7 @@ systemctl daemon-reload
 systemctl restart docker
 
 # Enable docker service
-systemctl enable docker.service
+systemctl enable docker
 
 # Fix bug that iptables being bypassed
 cat <<EOF >  /etc/sysctl.d/k8s.conf
@@ -68,3 +68,21 @@ systemctl enable --now kubelet
 
 # Turn off swap
 swapoff -a
+
+# Note:
+#   Edit the host file (resolve hostname to private IP)
+#   Edit /etc/sysconfig/kubelet, add `--node-ip=PRIVATE_IP` then restart kubelet
+
+# On master node
+#   Run following command to init the cluster, --pod-network-cidr is CNI provider's preffered IP range
+#     kubeadm init \
+#       --apiserver-advertise-address=172.16.0.100 \
+#       --apiserver-cert-extra-sans=172.16.0.100 \
+#       --pod-network-cidr=192.168.0.0/16
+#   Or create new token
+#     kubeadm token create
+#   Export API server config: export KUBECONFIG=/etc/kubernetes/admin.conf
+#   Install CNI pods: kubectl apply -f https://docs.projectcalico.org/v3.9/manifests/calico.yaml
+
+# On worker node
+#   Join the cluster

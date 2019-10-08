@@ -7,29 +7,61 @@
 Vagrant.configure("2") do |config|
   config.vm.box = "k8s-base"
 
-  # config.vm.provision "shell", path: 'setup.sh'
-
-  config.vm.define "master-1" do |master|
-    master.vm.hostname = 'master-1'
-
-    master.vm.network "private_network", ip: "192.168.33.100"
-
+  config.vm.define "master" do |master|
+    master.vm.hostname = 'master'
+    master.vm.network "private_network", ip: "172.16.0.100"
+    master.vm.network "forwarded_port", guest: 31286, host: 8080
     master.vm.provider "virtualbox" do |vb|
-      vb.name = "master-1"
+      vb.name = "master"
       vb.memory = "2048"
       vb.cpus = 2
     end
   end
 
-  config.vm.define "slave-1" do |slave|
-    slave.vm.hostname = 'slave-1'
-
-    slave.vm.network "private_network", ip: "192.168.33.10"
-
+  config.vm.define "slave" do |slave|
+    slave.vm.hostname = 'slave'
+    slave.vm.network "private_network", ip: "172.16.0.10"
+    slave.vm.network "forwarded_port", guest: 31286, host: 8081
     slave.vm.provider "virtualbox" do |vb|
-      vb.name = "slave-1"
+      vb.name = "slave"
       vb.memory = "2048"
       vb.cpus = 2
+    end
+  end
+
+  config.vm.define "store-1" do |store|
+    store.vm.box = 'centos/7'
+    store.vm.hostname = "store-1"
+    store.vm.network "private_network", ip: "172.16.0.210"
+    store.vbguest.auto_update = false
+    store.vm.provider "virtualbox" do |vb|
+      vb.name = "store-1"
+      vb.memory = "512"
+      vb.cpus = 1
+
+      disk_id = 1
+      unless File.exist?("gluster_storage1.vdi")
+        vb.customize ['createhd', '--filename', "gluster_storage1", '--size', 10 * 1024]
+      end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "gluster_storage1.vdi"]
+    end
+  end
+
+  config.vm.define "store-2" do |store|
+    store.vm.box = 'centos/7'
+    store.vm.hostname = "store-2"
+    store.vm.network "private_network", ip: "172.16.0.220"
+    store.vbguest.auto_update = false
+    store.vm.provider "virtualbox" do |vb|
+      vb.name = "store-2"
+      vb.memory = "512"
+      vb.cpus = 1
+
+      disk_id = 1
+      unless File.exist?("gluster_storage2.vdi")
+        vb.customize ['createhd', '--filename', "gluster_storage2", '--size', 10 * 1024]
+      end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "gluster_storage2.vdi"]
     end
   end
 end
