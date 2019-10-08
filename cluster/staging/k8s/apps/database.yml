@@ -35,7 +35,7 @@ spec:
       volumes:
         - name: database-storage
           persistentVolumeClaim:
-            claimName: database-storage-claim
+            claimName: database-persistentvolumeclaim
       containers:
         - name: database
           image: mongo:4.2.0-bionic
