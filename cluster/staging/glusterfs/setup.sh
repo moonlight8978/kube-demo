@@ -1,7 +1,8 @@
 # On gluster nodes
 yum update -y
 
-yum install centos-release-gluster -y
+yum search centos-release-gluster
+yum install centos-release-gluster6.noarch -y
 yum install glusterfs-server -y
 
 # Create partition
@@ -31,7 +32,7 @@ systemctl start glusterd
 gluster peer probe gluster-2
 
 # Create volume
-gluster volume create database replica 2 gluster-1:/data/glusterfs/database/brick1 gluster-2:/data/glusterfs/database/brick2
+gluster volume create database replica 2 gluster-1:/data/glusterfs/database/brick1/brick gluster-2:/data/glusterfs/database/brick2/brick
 
 # Start volume
 gluster volume start database
@@ -41,10 +42,13 @@ gluster volume start database
 # On worker node
 yum update -y
 
+yum search centos-release-gluster
+yum install centos-release-gluster6.noarch -y
 yum install glusterfs-fuse -y
+
+# Enable fuse kernel module
+modprobe fuse
 
 # By default, SELinux does not allow writing from a pod to a remote GlusterFS server
 setsebool -P virt_sandbox_use_fusefs on
 setsebool -P virt_use_fusefs on
-
-
