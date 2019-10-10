@@ -18,7 +18,6 @@ metadata:
   name: database
   namespace: staging
 spec:
-  clusterIP: None
   selector:
     tier: database
     environment: staging
