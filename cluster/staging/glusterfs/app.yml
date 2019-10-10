@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: database-persistencevolumeclaim
+  name: database-persistentvolumeclaim
 spec:
   storageClassName: database
   accessModes:
