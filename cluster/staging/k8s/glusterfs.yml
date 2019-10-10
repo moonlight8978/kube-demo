@@ -29,7 +29,6 @@ kind: PersistentVolume
 metadata:
   name: database-persistentvolume
 spec:
-  storageClassName: database
   capacity:
     storage: 2Gi
   accessModes:
