@@ -12,7 +12,7 @@ fdisk /dev/sdb # Following by n-p-1-t-8e-p-w
 # Create LV using LVM
 pvcreate /dev/sdb1
 vgcreate vg_gluster /dev/sdb1
-lvcreate -L 5G -n database1 vg_gluster
+lvcreate -L 2G -n database1 vg_gluster
 
 # Format the LV using xfs
 mkfs.xfs /dev/vg_gluster/database1
