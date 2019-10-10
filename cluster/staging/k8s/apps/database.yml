@@ -2,14 +2,14 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: database-persistentvolumeclaim
-  namespace: staging
+  annotations:
+    volume.beta.kubernetes.io/storage-class: database
 spec:
-  storageClassName: database
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 5Gi
 
 ---
 apiVersion: v1
