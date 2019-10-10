@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: "storageos-api"
+  namespace: "storageos-operator"
+  labels:
+    app: "storageos"
+type: "kubernetes.io/storageos"
+data:
+  apiUsername: YWRtaW4K
+  apiPassword: YWRtaW4K
