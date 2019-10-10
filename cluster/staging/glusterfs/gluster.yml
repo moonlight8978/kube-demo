@@ -1,0 +1,43 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: glusterfs-cluster
+spec:
+  ports:
+    - port: 1
+
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: glusterfs-cluster
+subsets:
+  - addresses:
+      - ip: 192.168.122.221
+    ports:
+      - port: 1
+  - addresses:
+      - ip: 192.168.122.222
+    ports:
+      - port: 1
+  - addresses:
+      - ip: 192.168.122.223
+    ports:
+      - port: 1
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: glusterfs-persistencevolume
+spec:
+  storageClassName: database
+  capacity:
+    storage: 4.95Gi
+  accessModes:
+    - ReadWriteOnce
+  glusterfs:
+    endpoints: glusterfs-cluster
+    path: database
+    readOnly: false

@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: database-persistencevolumeclaim
+spec:
+  storageClassName: database
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: database
+  template:
+    metadata:
+      labels:
+        tier: database
+    spec:
+      volumes:
+        - name: database-storage
+          persistentVolumeClaim:
+            claimName: database-persistentvolumeclaim
+      containers:
+        - name: database
+          image: mongo:4.2.0-bionic
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: database-storage
+              mountPath: /data/db
+          env:
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: root
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              value: "1221"
