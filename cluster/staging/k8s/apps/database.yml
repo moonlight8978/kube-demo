@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: staging
+spec:
+  selector:
+    tier: database
+    environment: staging
+  ports:
+    - port: 27017
+      targetPort: 27017
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database
+  namespace: staging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      environment: staging
+      tier: database
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        tier: database
+        environment: staging
+    spec:
+      volumes:
+        - name: database-storage
+          persistentVolumeClaim:
+            claimName: database-persistentvolumeclaim
+      containers:
+        - name: database
+          image: mongo:4.2.0-bionic
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: database-storage
+              mountPath: /data/db
+          envFrom:
+            - secretRef:
+                name: database-env
