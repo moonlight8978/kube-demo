@@ -1,2 +1,8 @@
 /docker-compose.yml
+/.env
+
 /web/web.conf
+/tmp
+
+.vagrant
+/**/*.vdi

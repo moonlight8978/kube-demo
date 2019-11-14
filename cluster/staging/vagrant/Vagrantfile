@@ -1,0 +1,65 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "k8s-base"
+
+  config.vm.define "master" do |master|
+    master.vm.hostname = 'master'
+    master.vm.network "private_network", ip: "172.16.0.100"
+    master.vm.network "forwarded_port", guest: 31286, host: 8080
+    master.vm.provider "virtualbox" do |vb|
+      vb.name = "master"
+      vb.memory = "2048"
+      vb.cpus = 2
+    end
+  end
+
+  config.vm.define "slave" do |slave|
+    slave.vm.hostname = 'slave'
+    slave.vm.network "private_network", ip: "172.16.0.101"
+    slave.vm.network "forwarded_port", guest: 31286, host: 8081
+    slave.vm.provider "virtualbox" do |vb|
+      vb.name = "slave"
+      vb.memory = "2048"
+      vb.cpus = 2
+    end
+  end
+
+  config.vm.define "store-1" do |store|
+    store.vm.box = 'centos/7'
+    store.vm.hostname = "store-1"
+    store.vm.network "private_network", ip: "172.16.0.201"
+    store.vbguest.auto_update = false
+    store.vm.provider "virtualbox" do |vb|
+      vb.name = "store-1"
+      vb.memory = "512"
+      vb.cpus = 1
+
+      unless File.exist?("gluster_storage1.vdi")
+        vb.customize ['createhd', '--filename', "gluster_storage1", '--size', 10 * 1024]
+      end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "gluster_storage1.vdi"]
+    end
+  end
+
+  config.vm.define "store-2" do |store|
+    store.vm.box = 'centos/7'
+    store.vm.hostname = "store-2"
+    store.vm.network "private_network", ip: "172.16.0.202"
+    store.vbguest.auto_update = false
+    store.vm.provider "virtualbox" do |vb|
+      vb.name = "store-2"
+      vb.memory = "512"
+      vb.cpus = 1
+
+      unless File.exist?("gluster_storage2.vdi")
+        vb.customize ['createhd', '--filename', "gluster_storage2", '--size', 10 * 1024]
+      end
+      vb.customize ['storageattach', :id, '--storagectl', 'IDE', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', "gluster_storage2.vdi"]
+    end
+  end
+end

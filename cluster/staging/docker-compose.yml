@@ -1,12 +1,14 @@
-version: '3.7'
+version: "3.7"
 services:
   web:
+    image: moonlight8978/kube-demo:web
     build:
-      context: web
-      dockerfile: ../cluster/staging/web.Dockerfile
+      context: .
+      dockerfile: cluster/staging/web.Dockerfile
     environment:
       NODE_ENV: staging
   server:
+    image: moonlight8978/kube-demo:server
     build:
       context: server
       dockerfile: ../cluster/staging/server.Dockerfile
