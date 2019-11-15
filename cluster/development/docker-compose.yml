@@ -1,28 +1,30 @@
 version: "3.7"
 services:
+  mysql:
+    image: mysql:8.0.18
+    volumes:
+      - ./tmp/mysql:/var/lib/mysql
+    restart: always
+
+  redis:
+    image: redis:5.0.6-alpine
+    volumes:
+      - ./tmp/redis:/data
+    restart: always
+
   web:
     build:
       context: web
       dockerfile: ../cluster/development/web.Dockerfile
-    command: yarn start
+    command: rails s -b 0.0.0.0
     volumes:
       - ./web:/app
     ports:
       - 4080:3000
     restart: always
     environment:
-      NODE_ENV: development
-
-  server:
-    build:
-      context: server
-      dockerfile: ../cluster/development/server.Dockerfile
-    command: yarn start
-    volumes:
-      - ./server:/app
-    ports:
-      - 4000:3000
-    restart: always
-    environment:
-      NODE_ENV: development
-      LOG_LEVEL: debug
+      RAILS_ENV: development
+      RAILS_MASTER_KEY: 4dbed8dbde353971c847e0ed768bf4a6
+    depends_on:
+      - mysql
+      - redis
