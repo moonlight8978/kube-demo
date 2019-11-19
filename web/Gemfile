@@ -5,19 +5,22 @@ ruby '2.6.5'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'dry-schema'
+gem 'dry-types'
+gem 'enumerize'
 gem 'image_processing', '~> 1.2'
 gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 4.1'
 gem 'rails', '~> 6.0.1'
 gem 'redis', '~> 4.0'
 gem 'sass-rails', '>= 6'
+gem 'sidekiq'
+gem 'slim-rails'
 gem 'webpacker', '~> 4.0'
-gem 'enumerize'
-gem 'dry-schema'
-gem 'dry-types'
 
 group :development, :test do
-  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'faker'
+  gem 'pry-rails'
 end
 
 group :development do

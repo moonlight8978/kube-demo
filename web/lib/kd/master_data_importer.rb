@@ -3,7 +3,7 @@ class Kd::MasterDataImporter
     Rails.root.join('db', 'master_data', filename)
   end
 
-  def import(filename, &block)
+  def import(filename)
     Kd::CsvReader.new.parse(path_to_file(filename)) do |row|
       yield(row)
     end

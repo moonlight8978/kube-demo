@@ -1,9 +1,9 @@
 class Kd::CsvReader
   DEFAULT_OPTIONS = {
-    encoding: "UTF-8:UTF-8",
+    encoding: 'UTF-8:UTF-8',
     headers: :first_row,
-    skip_blanks: true,
-  }
+    skip_blanks: true
+  }.freeze
 
   attr_reader :options
 
@@ -11,7 +11,7 @@ class Kd::CsvReader
     @options = DEFAULT_OPTIONS.merge(options)
   end
 
-  def parse(csv, &block)
+  def parse(csv)
     require 'csv'
     results = []
     CSV.foreach(csv, options) do |row|
