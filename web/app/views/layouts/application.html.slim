@@ -1,12 +1,10 @@
 doctype html
 html
   head
-    title
-      | App
+    title App
     = csrf_meta_tags
     = csp_meta_tag
     = javascript_pack_tag 'application'
 
   body
-    .content
-      = yield
+    .content = yield

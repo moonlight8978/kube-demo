@@ -12,7 +12,7 @@ require 'action_mailbox/engine'
 require 'action_text/engine'
 require 'action_view/railtie'
 require 'action_cable/engine'
-# require 'sprockets/railtie'
+require 'sprockets/railtie'
 # require "rails/test_unit/railtie"
 
 # Require the gems listed in Gemfile, including any gems
@@ -34,5 +34,6 @@ module Kd
 
     # Autoload files
     config.eager_load_paths << Rails.root.join('lib')
+    config.assets.paths << Rails.root.join('node_modules')
   end
 end
