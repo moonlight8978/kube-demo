@@ -14,5 +14,7 @@ require('channels')
 const images = require.context('../images', true)
 const imagePath = name => images(name, true)
 
-import 'bootstrap/dist/css/bootstrap.min.css'
-import '../src/application'
+import 'bootstrap/dist/css/bootstrap.min'
+import 'trix/dist/trix'
+
+import '../stylesheets/application'
