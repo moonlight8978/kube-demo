@@ -1,6 +1,10 @@
 {
   "name": "app",
   "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "prettier": "prettier --write ./**/*.{js,html,css,scss}"
+  },
   "dependencies": {
     "@rails/actioncable": "^6.0.0",
     "@rails/actiontext": "^6.0.1",
@@ -12,8 +16,8 @@
     "regenerator-runtime": "^0.13.3",
     "trix": "^1.0.0"
   },
-  "version": "0.1.0",
   "devDependencies": {
+    "prettier": "^1.19.1",
     "webpack-dev-server": "^3.9.0"
   }
 }
