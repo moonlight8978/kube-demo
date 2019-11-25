@@ -1,8 +1,12 @@
-= form_with model: @calculating, class: 'mt-3', local: true do |f|
-  .form-group
-    = f.label :raw do
-      | Upload file
-    = f.file_field :raw, class: 'form-control-file', type: 'file'
+table.table
+  thead
+    tr
+      th scope="col" #
+      th scope="col" Input
+      th scope="col" Result
+      th scope="col" Raw input
 
-  = f.button 'Submit', class: 'btn btn-primary', type: :submit
+  tbody
+    = render partial: 'calculating', collection: @calculatings
 
+= render 'form', model: @calculating

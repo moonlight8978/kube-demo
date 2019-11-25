@@ -19,5 +19,7 @@ Bundler.require(*Rails.groups)
 module Kd
   class Application < Rails::Application
     config.load_defaults 6.0
+
+    config.eager_load_paths << Rails.root.join('lib')
   end
 end

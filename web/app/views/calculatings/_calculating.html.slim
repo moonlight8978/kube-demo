@@ -1,0 +1,5 @@
+tr
+  th scope="row" = calculating.id
+  td = calculating.input.join(', ')
+  td = calculating.result
+  td = link_to 'Download', rails_blob_path(calculating.raw)

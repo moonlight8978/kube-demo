@@ -1,9 +1,11 @@
 version: "3.7"
 services:
   mysql:
-    image: mysql:8.0.18
+    image: mysql:5.7.28
     volumes:
       - ./tmp/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: "1221"
     restart: always
 
   redis:
@@ -24,7 +26,28 @@ services:
     restart: always
     environment:
       RAILS_ENV: development
-      RAILS_MASTER_KEY: 4dbed8dbde353971c847e0ed768bf4a6
+      RAILS_MASTER_KEY: 8347f8edc4915844a47f7db9cd76cb52
+    env_file:
+      - .env
     depends_on:
       - mysql
       - redis
+    tty: true
+    stdin_open: true
+
+  webpacker:
+    build:
+      context: web
+      dockerfile: ../cluster/development/web.Dockerfile
+    command: ./bin/webpack-dev-server
+    volumes:
+      - ./web:/app
+    restart: always
+    environment:
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+      RAILS_MASTER_KEY: 8347f8edc4915844a47f7db9cd76cb52
+    env_file:
+      - .env
+    ports:
+      - 3035:3035
