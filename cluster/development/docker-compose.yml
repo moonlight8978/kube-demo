@@ -14,6 +14,25 @@ services:
       - ./tmp/redis:/data
     restart: always
 
+  sidekiq:
+    build:
+      context: web
+      dockerfile: ../cluster/development/web.Dockerfile
+    command: sidekiq
+    volumes:
+      - ./web:/app
+    restart: always
+    environment:
+      RAILS_ENV: development
+      RAILS_MASTER_KEY: 8347f8edc4915844a47f7db9cd76cb52
+    env_file:
+      - .env
+    depends_on:
+      - mysql
+      - redis
+    tty: true
+    stdin_open: true
+
   web:
     build:
       context: web
@@ -32,6 +51,7 @@ services:
     depends_on:
       - mysql
       - redis
+      - sidekiq
     tty: true
     stdin_open: true
 
