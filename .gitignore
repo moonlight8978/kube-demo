@@ -1,4 +1,4 @@
-/docker-compose.yml
+/docker-*.yml
 /.env
 
 /web/web.conf

@@ -18,23 +18,28 @@ RUN apk add -u --no-cache \
 COPY Gemfile* ./
 RUN bundle install --deployment --jobs=3 --retry=3 --without development test
 
-# Main rails server
-FROM base AS appserver
-
-COPY . .
-
-EXPOSE 3000
-
 # Image to build assets
 FROM base AS assets
 
 ARG RAILS_MASTER_KEY
 
+ENV RAILS_ENV=production \
+  NODE_ENV=production
+
 COPY package.json yarn.lock ./
 RUN yarn install
 
 COPY . .
-RUN RAILS_MASTER_KEY=$RAILS_MASTER_KEY RAILS_ENV=production bundle exec rails assets:precompile
+RUN RAILS_MASTER_KEY=$RAILS_MASTER_KEY bundle exec rails assets:precompile
+
+# Main rails server
+FROM base AS appserver
+
+COPY . .
+
+COPY --from=assets /app/public ./public
+
+EXPOSE 3000
 
 # Webserver to serve assets
 FROM nginx:1.17.3-alpine AS webserver
@@ -42,8 +47,8 @@ FROM nginx:1.17.3-alpine AS webserver
 RUN mkdir -p /www/data
 WORKDIR /www/data
 
-COPY cluster/staging/nginx.conf /etc/nginx/conf.d/default.conf
+COPY assets.conf /etc/nginx/conf.d/default.conf
 
-COPY --from=assets /app/public/packs /app/public/assets ./
+COPY --from=assets /app/public ./
 
 EXPOSE 80

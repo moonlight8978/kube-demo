@@ -1,19 +1,63 @@
 version: "3.7"
 services:
+  mysql:
+    image: mysql:5.7.28
+    volumes:
+      - kube-demo-stg-mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: $MYSQL_PASSWORD
+    restart: always
+
+  redis:
+    image: redis:5.0.7-alpine
+    volumes:
+      - kube-demo-stg-redis:/data
+    restart: always
+
+  sidekiq:
+    image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
+    command: bundle exec sidekiq
+    env_file: .env
+    restart: always
+    depends_on:
+      - redis
+      - mysql
+    volumes:
+      - ./tmp/key.json:/app/secrets/google/key.json
+
+  assets:
+    image: asia.gcr.io/static-mediator-245800/kube-demo-assets:latest
+    restart: always
+    labels:
+      - "traefik.http.routers.assets.rule=Host(`stg.assets.kube.demo`)"
+
   web:
     image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
-    build:
-      context: web
-      dockerfile: ../cluster/staging/web.Dockerfile
-      target: appserver
-      args:
-        RAILS_MASTER_KEY: $RAILS_MASTER_KEY
+    command: bundle exec puma
+    env_file: .env
+    restart: always
+    depends_on:
+      - redis
+      - mysql
+      - sidekiq
+    volumes:
+      - ./tmp/key.json:/app/secrets/google/key.json
+    labels:
+      - "traefik.http.routers.web.rule=Host(`stg.kube.demo`)"
 
-  assets-caching:
-    image: asia.gcr.io/static-mediator-245800/kube-demo-assets-caching:latest
-    build:
-      context: web
-      dockerfile: ../cluster/staging/web.Dockerfile
-      target: webserver
-      args:
-        RAILS_MASTER_KEY: $RAILS_MASTER_KEY
+  reverse-proxy:
+    image: traefik:v2.1
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: always
+    depends_on:
+      - web
+      - assets
+
+volumes:
+  kube-demo-stg-redis:
+  kube-demo-stg-mysql:
