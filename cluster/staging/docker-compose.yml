@@ -1,16 +1,19 @@
 version: "3.7"
 services:
   web:
-    image: moonlight8978/kube-demo:web
+    image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
     build:
-      context: .
-      dockerfile: cluster/staging/web.Dockerfile
-    environment:
-      NODE_ENV: staging
-  server:
-    image: moonlight8978/kube-demo:server
+      context: web
+      dockerfile: ../cluster/staging/web.Dockerfile
+      target: appserver
+      args:
+        RAILS_MASTER_KEY: $RAILS_MASTER_KEY
+
+  assets-caching:
+    image: asia.gcr.io/static-mediator-245800/kube-demo-assets-caching:latest
     build:
-      context: server
-      dockerfile: ../cluster/staging/server.Dockerfile
-    environment:
-      NODE_ENV: staging
+      context: web
+      dockerfile: ../cluster/staging/web.Dockerfile
+      target: webserver
+      args:
+        RAILS_MASTER_KEY: $RAILS_MASTER_KEY

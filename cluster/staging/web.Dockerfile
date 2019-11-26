@@ -1,18 +1,49 @@
-FROM node:12.10.0-alpine as builder
+# Rails base image
+FROM ruby:2.6.5-alpine3.10 AS base
 
 RUN mkdir /app
 WORKDIR /app
 
-COPY web/package.json web/yarn.lock ./
+RUN apk add -u --no-cache \
+  build-base \
+  linux-headers \
+  git \
+  mysql-dev \
+  nodejs \
+  yarn \
+  tzdata \
+  file \
+  imagemagick
+
+COPY Gemfile* ./
+RUN bundle install --deployment --jobs=3 --retry=3 --without development test
+
+# Main rails server
+FROM base AS appserver
+
+COPY . .
+
+EXPOSE 3000
+
+# Image to build assets
+FROM base AS assets
+
+ARG RAILS_MASTER_KEY
+
+COPY package.json yarn.lock ./
 RUN yarn install
 
-COPY web .
-RUN yarn build
+COPY . .
+RUN RAILS_MASTER_KEY=$RAILS_MASTER_KEY RAILS_ENV=production bundle exec rails assets:precompile
 
-FROM nginx:1.17.3-alpine
+# Webserver to serve assets
+FROM nginx:1.17.3-alpine AS webserver
 
-RUN mkdir /app
-WORKDIR /app
+RUN mkdir -p /www/data
+WORKDIR /www/data
 
-COPY --from=builder /app/build ./
-COPY cluster/staging/web.conf /etc/nginx/conf.d/default.conf
+COPY cluster/staging/nginx.conf /etc/nginx/conf.d/default.conf
+
+COPY --from=assets /app/public/packs /app/public/assets ./
+
+EXPOSE 80
