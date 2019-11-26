@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   web:
-    image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
+    image: moonlight8978/kube-demo-web:latest
     build:
       context: web
       dockerfile: ../cluster/staging/web.Dockerfile
@@ -10,8 +10,10 @@ services:
         RAILS_MASTER_KEY: $RAILS_MASTER_KEY
 
   assets:
-    image: asia.gcr.io/static-mediator-245800/kube-demo-assets:latest
+    image: moonlight8978/kube-demo-assets:latest
     build:
       context: web
       dockerfile: ../cluster/staging/web.Dockerfile
       target: webserver
+      args:
+        RAILS_MASTER_KEY: $RAILS_MASTER_KEY

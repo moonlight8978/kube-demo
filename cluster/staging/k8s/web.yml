@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  RAILS_ENV: production
+  ASSET_HOST: http://stg.assets.kube.demo
+
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: web
+  template:
+    metadata:
+      labels:
+        tier: web
+    spec:
+      initContainers:
+        image: moonlight8978/kube-demo-web:latest
+        command:
+          - bundle
+          - exec
+          - rails
+          - db:create
+          - db:migrate
+      containers:
+        image: moonlight8978/kube-demo-web:latest
+        command:
+          - bundle
+          - exec
+          - puma
+        ports:
+
+      volumes:
+        - name: google-storage-key
