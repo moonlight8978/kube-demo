@@ -1,0 +1,12 @@
+table.table
+  thead
+    tr
+      th scope="col" #
+      th scope="col" Input
+      th scope="col" Result
+      th scope="col" Raw input
+
+  tbody
+    = render partial: 'calculating', collection: @calculatings
+
+= render 'form', model: @calculating

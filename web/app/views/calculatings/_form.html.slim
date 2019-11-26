@@ -1,0 +1,7 @@
+= form_with model: model, class: 'mt-3', local: true do |f|
+  .form-group
+    = f.label :raw do
+      | Upload file
+    = f.file_field :raw, class: 'form-control-file', type: 'file'
+
+  = f.button 'Submit', class: 'btn btn-primary', type: :submit

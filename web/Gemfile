@@ -1,0 +1,36 @@
+source 'https://rubygems.org'
+git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+
+ruby '2.6.5'
+
+gem 'bcrypt', '~> 3.1.7'
+gem 'bootsnap', '>= 1.4.2', require: false
+gem 'dry-schema'
+gem 'dry-types'
+gem 'enumerize'
+gem 'image_processing', '~> 1.2'
+gem 'mysql2', '>= 0.4.4'
+gem 'puma', '~> 4.1'
+gem 'rails', '~> 6.0.1'
+gem 'redis', '~> 4.0'
+gem 'sidekiq'
+gem 'slim-rails'
+gem 'webpacker', '~> 4.0'
+gem "google-cloud-storage", require: false
+
+group :development, :test do
+  gem 'faker'
+  gem 'pry-rails'
+end
+
+group :development do
+  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'rubocop'
+  gem 'spring'
+  gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console', '>= 3.3.0'
+end
+
+group :production do
+  gem 'lograge'
+end
