@@ -17,5 +17,5 @@ local:
 google:
   service: GCS
   project: static-mediator-245800
-  credentials: <%= Rails.root.join("tmp", "key.json") %>
+  credentials: <%= Rails.root.join("secrets", "google", "key.json") %>
   bucket: kube-demo-8ab12df
