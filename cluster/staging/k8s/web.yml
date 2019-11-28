@@ -51,20 +51,20 @@ spec:
             items:
               - key: key.json
                 path: ./key.json
-      # initContainers:
-      #   - name: migration
-      #     image: moonlight8978/kube-demo-web:latest
-      #     command:
-      #       - bundle
-      #       - exec
-      #       - rails
-      #       - db:create
-      #       - db:migrate
-      #     envFrom:
-      #       - configMapRef:
-      #           name: web-config
-      #       - configMapRef:
-      #           name: web-env
+      initContainers:
+        - name: migration
+          image: moonlight8978/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - rails
+            - db:create
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - configMapRef:
+                name: web-env
       containers:
         - name: web
           image: moonlight8978/kube-demo-web:latest
@@ -81,6 +81,45 @@ spec:
             - containerPort: 3000
               name: www
               protocol: TCP
+          volumeMounts:
+            - name: secret
+              mountPath: /app/secrets/google
+              readOnly: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: worker
+  template:
+    metadata:
+      labels:
+        tier: worker
+    spec:
+      volumes:
+        - name: secret
+          secret:
+            secretName: web-secret
+            items:
+              - key: key.json
+                path: ./key.json
+      containers:
+        - name: worker
+          image: moonlight8978/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - configMapRef:
+                name: web-env
           volumeMounts:
             - name: secret
               mountPath: /app/secrets/google
