@@ -1,0 +1,34 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: assets
+spec:
+  selector:
+    matchLabels:
+      tier: assets
+  template:
+    metadata:
+      labels:
+        tier: assets
+    spec:
+      containers:
+        - name: assets
+          image: moonlight8978/kube-demo-assets:latest
+          ports:
+            - containerPort: 80
+              name: www
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: assets
+spec:
+  selector:
+    tier: assets
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
