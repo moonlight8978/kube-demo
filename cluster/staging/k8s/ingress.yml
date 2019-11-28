@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kube-demo-ingress
+spec:
+  rules:
+    - host: stg.kube.demo
+      http:
+        paths:
+          - backend:
+              serviceName: web
+              servicePort: http
+
+    - host: assets.stg.kube.demo
+      http:
+        paths:
+          - backend:
+              serviceName: assets
+              servicePort: http

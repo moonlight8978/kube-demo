@@ -1,0 +1,140 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: web-env
+# data:
+#   MYSQL_USERNAME: root
+#   MYSQL_PASSWORD: 1221
+#   MYSQL_HOST: mysql
+#   MYSQL_PORT: 3306
+#   REDIS_URL: redis://redis:6379/0
+#   RAILS_MASTER_KEY: abc
+
+# ---
+# apiVersion: v1
+# kind: Secret
+# metadata:
+#   name: web-secret
+# type: Opaque
+# data:
+#   google/key.json: xyz
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  RAILS_ENV: production
+  ASSET_HOST: http://stg.assets.kube.demo
+  RAILS_LOG_TO_STDOUT: enabled
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      tier: web
+  template:
+    metadata:
+      labels:
+        tier: web
+    spec:
+      volumes:
+        - name: secret
+          secret:
+            secretName: web-secret
+            items:
+              - key: key.json
+                path: ./key.json
+      initContainers:
+        - name: migration
+          image: moonlight8978/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - rails
+            - db:create
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - configMapRef:
+                name: web-env
+      containers:
+        - name: web
+          image: moonlight8978/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - puma
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - configMapRef:
+                name: web-env
+          ports:
+            - containerPort: 3000
+              name: www
+              protocol: TCP
+          volumeMounts:
+            - name: secret
+              mountPath: /app/secrets/google
+              readOnly: true
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: worker
+  template:
+    metadata:
+      labels:
+        tier: worker
+    spec:
+      volumes:
+        - name: secret
+          secret:
+            secretName: web-secret
+            items:
+              - key: key.json
+                path: ./key.json
+      containers:
+        - name: worker
+          image: moonlight8978/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - configMapRef:
+                name: web-env
+          volumeMounts:
+            - name: secret
+              mountPath: /app/secrets/google
+              readOnly: true
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    tier: web
+  ports:
+    - name: http
+      port: 80
+      targetPort: www
+      protocol: TCP

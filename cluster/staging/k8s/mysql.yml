@@ -1,0 +1,53 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: mysql-env
+# data:
+#   MYSQL_ROOT_PASSWORD: "1221"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: mysql
+  template:
+    metadata:
+      labels:
+        tier: mysql
+    spec:
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: mysql-data
+      containers:
+        - name: mysql
+          image: mysql:5.7.28
+          envFrom:
+            - configMapRef:
+                name: mysql-env
+          ports:
+            - containerPort: 3306
+              name: mysql
+              protocol: TCP
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/mysql
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  selector:
+    tier: mysql
+  ports:
+    - name: mysql
+      port: 3306
+      targetPort: mysql
+      protocol: TCP
