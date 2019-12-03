@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: kube-demo-ingress
+  name: web-ingress
 spec:
   rules:
     - host: stg.kube.demo
