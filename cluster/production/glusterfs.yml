@@ -9,7 +9,7 @@ spec:
 
 ---
 apiVersion: v1
-kind: Endpoint
+kind: Endpoints
 metadata:
   name: glusterfs
 subsets:
