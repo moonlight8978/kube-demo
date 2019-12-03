@@ -20,6 +20,20 @@ spec:
             items:
               - key: googleStorageKey
                 path: ./key.json
+      initContainers:
+        - name: database-migration
+          image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - rails
+            - db:create
+            - db:migrate
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: web-secret
       containers:
         - name: web
           image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
