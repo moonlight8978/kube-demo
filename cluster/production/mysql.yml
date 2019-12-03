@@ -33,7 +33,7 @@ spec:
               command:
                 - sh
                 - -c
-                - "mysqladmin ping -u root -p ${MYSQL_ROOT_PASSWORD}"
+                - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
             initialDelaySeconds: 30
             periodSeconds: 10
             timeoutSeconds: 5
@@ -45,7 +45,7 @@ spec:
               command:
                 - sh
                 - -c
-                - "mysqladmin ping -u root -p ${MYSQL_ROOT_PASSWORD}"
+                - "mysqladmin ping -u root -p${MYSQL_ROOT_PASSWORD}"
             initialDelaySeconds: 5
             periodSeconds: 10
             timeoutSeconds: 1
