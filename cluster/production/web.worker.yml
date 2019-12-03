@@ -19,8 +19,8 @@ spec:
             defaultMode: 600
             secretName: google-storage
             items:
-              key: googleStorageKey
-              path: ./key.json
+              - key: googleStorageKey
+                path: ./key.json
       containers:
         - name: worker
           image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
