@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: web-config
+data:
+  RAILS_ENV: production
+  ASSET_HOST: http://stg.assets.kube.demo
+  RAILS_LOG_TO_STDOUT: enabled
+  REDIS_URL: redis://redis.tcp.redis.default.svc.cluster.local:6379/0
+  MYSQL_HOST: mysql.tcp.mysql.default.svc.cluster.local
+  MYSQL_PORT: 3306

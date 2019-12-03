@@ -1,0 +1,39 @@
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      tier: worker
+  template:
+    metadata:
+      labels:
+        tier: worker
+    spec:
+      volumes:
+        - name: google-storage-key
+          secret:
+            defaultMode: 600
+            secretName: google-storage
+            items:
+              key: googleStorageKey
+              path: ./key.json
+      containers:
+        - name: worker
+          image: asia.gcr.io/static-mediator-245800/kube-demo-web:latest
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          envFrom:
+            - configMapRef:
+                name: web-config
+            - secretRef:
+                name: web-secret
+          volumeMounts:
+            - name: google-storage-key
+              mountPath: /app/secrets/google
+              readOnly: true
