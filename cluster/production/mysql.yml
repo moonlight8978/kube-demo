@@ -20,7 +20,7 @@ spec:
       containers:
         - name: mysql
           image: mysql:5.7.28
-          env_from:
+          envFrom:
             - secretRef:
                 name: mysql-secret
           ports:
