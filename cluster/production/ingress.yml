@@ -11,7 +11,7 @@ spec:
               serviceName: web
               servicePort: http
 
-    - host: assets.stg.kube.demo
+    - host: stg.assets.kube.demo
       http:
         paths:
           - backend:
