@@ -16,7 +16,6 @@ spec:
       volumes:
         - name: google-storage-key
           secret:
-            defaultMode: 600
             secretName: google-storage
             items:
               - key: googleStorageKey
