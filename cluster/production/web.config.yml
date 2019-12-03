@@ -9,4 +9,4 @@ data:
   RAILS_LOG_TO_STDOUT: enabled
   REDIS_URL: redis://redis.tcp.redis.default.svc.cluster.local:6379/0
   MYSQL_HOST: mysql.tcp.mysql.default.svc.cluster.local
-  MYSQL_PORT: 3306
+  MYSQL_PORT: "3306"
